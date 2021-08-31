@@ -1,0 +1,26 @@
+{
+    "name": "wontonee/payu",
+    "description": "Payu payment gateway for bagisto laravel ecommerce open source platform.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Wontonee\\Payu\\": "src/"
+        }
+    },
+	"extra": {
+        "laravel": {
+            "providers": [
+                "Wontonee\\Payu\\Providers\\PayuServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "authors": [
+        {
+            "name": "Saju G",
+            "email": "saju.g@wontonetech.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
