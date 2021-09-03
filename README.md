@@ -16,9 +16,8 @@ Payu is a popular payment gateway in india. This package provides a additional s
  'payu-salt-key'                      => 'Salt Key',
  'payu-websitestatus'                      => 'Sandbox/Live',
 ```
-4. Now run `php artisan config:cache`
-5. Now go to your bagisto admin section `admin/configuration/sales/paymentmethods` you will see the new payment gateway payu. 
-6. Now open `app\Http\Middleware\VerifyCsrfToken.php` and add this route to the exception list.
+4. Now go to your bagisto admin section `admin/configuration/sales/paymentmethods` you will see the new payment gateway payu. 
+5. Now open `app\Http\Middleware\VerifyCsrfToken.php` and add this route to the exception list.
 ```sh
 protected $except = [
                   '/payu-success',
@@ -26,7 +25,7 @@ protected $except = [
            ];
 
 ```
-7. Now open the command prompt and run `composer dump-autoload`.
+6. Now run `php artisan config:cache`
 
 ## Manual Installation
 1. Download the zip folder from the github repository.
