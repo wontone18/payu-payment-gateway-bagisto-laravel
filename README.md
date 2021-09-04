@@ -63,4 +63,8 @@ protected $except = [
 
 ```
 
+## Troubleshooting
+
+1. if anybody facing after placing a order you are not redirecting to payment gateway and getting a route error then simply go to `bootstrap/cache` and delete all the cache files.
+
 For any help or customisation  <https://www.wontonee.com> or email us <hello@wontonee.com>
