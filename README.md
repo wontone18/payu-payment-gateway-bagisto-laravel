@@ -1,67 +1,34 @@
 # Bagisto Payu Payment Gateway
 Payu is a popular payment gateway in india. This package provides a additional strong help for the user to use the payu payment gateway in their Bagisto laravel ecommerce application.
 
-## Automatic Installation
-1. Use command prompt to run this package `composer require wontonee/payu`
-2. Now open `config/app.php` and register payu provider.
+## Installation
+1. Use the command prompt to install this package:
+```sh
+composer require wontonee/payu
+```
+
+2. Open `config/app.php` and register the Payu provider.
 ```sh
 'providers' => [
         // Payu provider
         Wontonee\Payu\Providers\PayuServiceProvider::class,
 ]
 ```
-3. Now go to `package/Webkul/Admin/src/Resources/lang/en` copy these line at the bottom end of code.
-```sh
- 'payu-merchant-key'                      => 'Merchant Key',
- 'payu-salt-key'                      => 'Salt Key',
- 'payu-websitestatus'                      => 'Sandbox/Live',
-```
-4. Now go to your bagisto admin section `admin/configuration/sales/paymentmethods` you will see the new payment gateway payu. 
-5. Now open `app\Http\Middleware\VerifyCsrfToken.php` and add this route to the exception list.
+3. Navigate to the `admin panel -> Configure/Payment Methods`, where Payu will be visible at the end of the payment method list.
+
+4. Now open `app\Http\Middleware\VerifyCsrfToken.php` and add this route to the exception list.
 ```sh
 protected $except = [
                   '/payu-success',
                   '/payu-failure'
            ];
+```
 
+5. Now run 
+```sh
+php artisan config:cache
 ```
-6. Now run `php artisan config:cache`
 
-## Manual Installation
-1. Download the zip folder from the github repository.
-2. Unzip the folder and go to your bagisto application path `package` and create a folder name `Wontonee/Payu/` upload `src` folder inside this path.
-3. Now open `config/app.php` and register payu provider.
-```sh
-'providers' => [
-        // Payu provider
-        Wontonee\Payu\Providers\PayuServiceProvider::class,
-]
-```
-4. Now open composer.json and go to `autoload psr-4`.
-```sh
-"autoload": {
-        "psr-4": {
-        "Wontonee\\Payu\\": "packages/Wontonee/Payu/src"
-        }
-    }
-```
-5. Now go to `package/Webkul/Admin/src/Resources/lang/en` copy these line at the bottom end of code.
-```sh
- 'payu-merchant-key'                      => 'Merchant Key',
- 'payu-salt-key'                      => 'Salt Key',
- 'payu-websitestatus'                      => 'Sandbox/Live',
-```
-6. Now open the command prompt and run `composer dump-autoload`.
-7. Now run `php artisan config:cache`
-9. Now go to your bagisto admin section `admin/configuration/sales/paymentmethods` you will see the new payment gateway payu. 
-9. Now open `app\Http\Middleware\VerifyCsrfToken.php` and add this route to the exception list.
-```sh
-protected $except = [
-                  '/payu-success',
-                  '/payu-failure'
-           ];
-
-```
 
 ## Troubleshooting
 
