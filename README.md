@@ -1,5 +1,5 @@
 # Bagisto Payu Payment Gateway
-Payu is a popular payment gateway in india. This package provides a additional strong help for the user to use the payu payment gateway in their Bagisto laravel ecommerce application.
+Payu is a popular payment gateway in India. This package provides strong support for users to integrate the Payu payment gateway into their Bagisto Laravel e-commerce applications.
 
 ## Installation
 1. Use the command prompt to install this package:
