@@ -32,6 +32,7 @@ php artisan config:cache
 
 ## Troubleshooting
 
-1. if anybody facing after placing a order you are not redirecting to payment gateway and getting a route error then simply go to `bootstrap/cache` and delete all the cache files.
+1. If you encounter an issue where you are not redirected to the payment gateway after placing an order and receive a route error, navigate to `bootstrap/cache` and delete all cache files.
 
-For any help or customisation  <https://www.wontonee.com> or email us <hello@wontonee.com>
+
+For any help or customization, visit <https://www.wontonee.com> or email us <dev@wontonee.com>
