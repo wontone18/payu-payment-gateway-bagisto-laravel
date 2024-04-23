@@ -37,6 +37,14 @@ class PayuController extends Controller
 	}
 
 	/**
+	 * hash creation
+	 */
+	public function getHashKey($params)
+	{
+		return hash('sha512', $params['key'] . '|' . $params['txnid'] . '|' . $params['amount'] . '|' . $params['productinfo'] . '|' . $params['firstname'] . '|' . $params['email'] . '|' . $params['udf1'] . '|' . $params['udf2'] . '|' . $params['udf3'] . '|' . $params['udf4'] . '|' . $params['udf5'] . '||||||' . $params['salt']);
+	}
+
+	/**
 	 * Redirects to the paytm server.
 	 *
 	 * @return \Illuminate\View\View
@@ -49,14 +57,13 @@ class PayuController extends Controller
 
 		$billingAddress = $cart->billing_address;
 
-		$MERCHANT_KEY = core()->getConfigData('sales.paymentmethods.payu.payu_merchant_key');
-		$SALT = core()->getConfigData('sales.paymentmethods.payu.salt_key');
+		$MERCHANT_KEY = core()->getConfigData('sales.payment_methods.payu.payu_merchant_key');
+		$SALT = core()->getConfigData('sales.payment_methods.payu.salt_key');
 
-
-		if (core()->getConfigData('sales.paymentmethods.payu.payu-website') == "Sandbox") :
-			$PAYU_BASE_URL = "https://sandboxsecure.payu.in";        // For Sandbox Mode
+		if (core()->getConfigData('sales.payment_methods.payu.payu-website') == "Sandbox") :
+			$PAYU_BASE_URL = "https://test.payu.in";        // For Sandbox Mode
 		else :
-			$PAYU_BASE_URL = "https://secure.payu.in";        // For Sandbox Mode
+			$PAYU_BASE_URL = "https://secure.payu.in";        // For Live Mode
 		endif;
 
 		$shipping_rate = $cart->selected_shipping_rate ? $cart->selected_shipping_rate->price : 0; // shipping rate
@@ -65,7 +72,7 @@ class PayuController extends Controller
 
 		$posted  = array(
 			"key" => $MERCHANT_KEY,
-			"txnid" => $cart->id,
+			"txnid" => $cart->id . '_' . now()->format('YmdHis'),
 			"amount" => $total_amount,
 			"firstname" => $billingAddress->name,
 			"email" => $billingAddress->email,
@@ -74,21 +81,17 @@ class PayuController extends Controller
 			"furl" => route('payu.failure'),
 			"curl" => "cancel",
 			"hash" => '',
-			"productinfo" => 'Bagisto Order no ' . $cart->id
+			"productinfo" => 'Bagisto Order no ' . $cart->id,
+			'udf1' => '',
+			'udf2' => '',
+			'udf3' => '',
+			'udf4' => '',
+			'udf5' => '',
+			'salt' => $SALT
+
 		);
-		/*** has  */
-		// Hash Sequence
-		$hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-
-		$hashVarsSeq = explode('|', $hashSequence);
-		$hash_string = '';
-		foreach ($hashVarsSeq as $hash_var) {
-			$hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
-			$hash_string .= '|';
-		}
-
-		$hash_string .= $SALT;
-		$hash = strtolower(hash('sha512', $hash_string));
+		/*** hash key generate  */
+		$hash = $this->getHashKey($posted);
 		$action = $PAYU_BASE_URL . '/_payment';
 		return view('payu::payu-redirect')->with(compact('MERCHANT_KEY', 'SALT', 'action', 'posted', 'hash'));
 	}
@@ -107,7 +110,7 @@ class PayuController extends Controller
 		Cart::deActivateCart();
 		session()->flash('order', $order);
 		// Order and prepare invoice
-		return redirect()->route('shop.checkout.success');
+		return redirect()->route('shop.checkout.onepage.success');
 	}
 
 	/**

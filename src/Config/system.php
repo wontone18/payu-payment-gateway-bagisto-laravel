@@ -2,27 +2,28 @@
 
 return [
     [
-        'key'    => 'sales.paymentmethods.payu',
-        'name'   => 'Payu',
+        'key'    => 'sales.payment_methods.payu',
+        'info'   => 'Payu extension created for bagisto by wontonee.',
+        'name'   => 'Payu Payment Gateway',
         'sort'   => 6,
         'fields' => [
             [
                 'name'          => 'title',
-                'title'         => 'admin::app.admin.system.title',
+                'title'         => 'Payu',
                 'type'          => 'text',
                 'validation'    => 'required',
                 'channel_based' => false,
                 'locale_based'  => true,
             ], [
                 'name'          => 'description',
-                'title'         => 'admin::app.admin.system.description',
+                'title'         => 'Description',
                 'type'          => 'textarea',
                 'channel_based' => false,
                 'locale_based'  => true,
             ], 
             [
                 'name'          => 'payu_merchant_key',
-                'title'         => 'admin::app.admin.system.payu-merchant-key',
+                'title'         => 'Merchant Key',
                 'type'          => 'text',
                 'validation'    => 'required',
                 'channel_based' => false,
@@ -30,7 +31,7 @@ return [
             ],	
 			[
                 'name'          => 'salt_key',
-                'title'         => 'admin::app.admin.system.payu-salt-key',
+                'title'         => 'Merchant Salt',
                 'type'          => 'text',
                 'validation'    => 'required',
                 'channel_based' => false,
@@ -38,7 +39,7 @@ return [
             ],
             [
                 'name'    => 'payu-website',
-                'title'   => 'admin::app.admin.system.payu-websitestatus',
+                'title'   => 'Status',
                 'type'    => 'select',
                 'options' => [
                     [
@@ -52,7 +53,7 @@ return [
             ],
             [
                 'name'          => 'active',
-                'title'         => 'admin::app.admin.system.status',
+                'title'         => 'admin::app.configuration.index.sales.payment-methods.status',
                 'type'          => 'boolean',
                 'validation'    => 'required',
                 'channel_based' => false,
