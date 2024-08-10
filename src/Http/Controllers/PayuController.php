@@ -5,6 +5,7 @@ namespace Wontonee\Payu\Http\Controllers;
 
 use Webkul\Checkout\Facades\Cart;
 use Webkul\Sales\Repositories\OrderRepository;
+use Webkul\Sales\Transformers\OrderResource;
 use Webkul\Sales\Repositories\InvoiceRepository;
 use Illuminate\Support\Facades\Config;
 
@@ -102,13 +103,15 @@ class PayuController extends Controller
 	public function success()
 	{
 
-		$order = $this->orderRepository->create(Cart::prepareDataForOrder());
+		$cart = Cart::getCart();
+		$data = (new OrderResource($cart))->jsonSerialize(); // new class v2.2
+		$order = $this->orderRepository->create($data);
 		$this->orderRepository->update(['status' => 'processing'], $order->id);
 		if ($order->canInvoice()) {
 			$this->invoiceRepository->create($this->prepareInvoiceData($order));
 		}
 		Cart::deActivateCart();
-		session()->flash('order', $order);
+		session()->flash('order_id', $order->id);
 		// Order and prepare invoice
 		return redirect()->route('shop.checkout.onepage.success');
 	}
