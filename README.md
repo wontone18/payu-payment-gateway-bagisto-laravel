@@ -1,6 +1,14 @@
 # Bagisto Payu Payment Gateway
 Payu is a popular payment gateway in India. This package provides strong support for users to integrate the Payu payment gateway into their Bagisto Laravel e-commerce applications.
 
+## Licensing Information
+
+You must take a license from the website [https://myapps.wontonee.com/login](https://myapps.wontonee.com/login), either trial or paid.
+
+- **Trial License**: Works for 7 days.
+- **Paid License**: Valid for 1 year and costs only ₹400.  
+  Includes updates and support.
+
 ## Installation
 1. Use the command prompt to install this package:
 ```sh
