@@ -3,7 +3,7 @@
 return [
     [
         'key'    => 'sales.payment_methods.payu',
-        'info'   => 'Payu extension created for bagisto by wontonee.',
+        'info'   => 'Payu extension created for bagisto by wontonee. <span style="color: blue;"><a href="https://myapps.wontonee.com/" target="_blank" style="color: blue;">   <i class="fas fa-external-link-alt"></i>Get License</a></span>',
         'name'   => 'Payu Payment Gateway',
         'sort'   => 6,
         'fields' => [
@@ -21,6 +21,14 @@ return [
                 'channel_based' => false,
                 'locale_based'  => true,
             ], 
+            [
+                'name'          => 'license_keyid',
+                'title'         => 'License',
+                'type'          => 'text',
+                'validation'    => 'required',
+                'channel_based' => false,
+                'locale_based'  => false,
+            ],
             [
                 'name'          => 'payu_merchant_key',
                 'title'         => 'Merchant Key',

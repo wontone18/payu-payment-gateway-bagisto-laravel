@@ -8,6 +8,7 @@ use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Transformers\OrderResource;
 use Webkul\Sales\Repositories\InvoiceRepository;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 
 class PayuController extends Controller
 {
@@ -38,14 +39,6 @@ class PayuController extends Controller
 	}
 
 	/**
-	 * hash creation
-	 */
-	public function getHashKey($params)
-	{
-		return hash('sha512', $params['key'] . '|' . $params['txnid'] . '|' . $params['amount'] . '|' . $params['productinfo'] . '|' . $params['firstname'] . '|' . $params['email'] . '|' . $params['udf1'] . '|' . $params['udf2'] . '|' . $params['udf3'] . '|' . $params['udf4'] . '|' . $params['udf5'] . '||||||' . $params['salt']);
-	}
-
-	/**
 	 * Redirects to the paytm server.
 	 *
 	 * @return \Illuminate\View\View
@@ -60,6 +53,7 @@ class PayuController extends Controller
 
 		$MERCHANT_KEY = core()->getConfigData('sales.payment_methods.payu.payu_merchant_key');
 		$SALT = core()->getConfigData('sales.payment_methods.payu.salt_key');
+		$licenseKey = core()->getConfigData('sales.payment_methods.payu.license_keyid');
 
 		if (core()->getConfigData('sales.payment_methods.payu.payu-website') == "Sandbox") :
 			$PAYU_BASE_URL = "https://test.payu.in";        // For Sandbox Mode
@@ -71,8 +65,12 @@ class PayuController extends Controller
 		$discount_amount = $cart->discount_amount; // discount amount
 		$total_amount =  ($cart->sub_total + $cart->tax_total + $shipping_rate) - $discount_amount; // total amount
 
-		$posted  = array(
+		// Send the data to license server for checking license
+		$posted = array(
+			"license" => $licenseKey,
+			'product_id' => 'PayuBagisto',
 			"key" => $MERCHANT_KEY,
+			'salt' => $SALT,
 			"txnid" => $cart->id . '_' . now()->format('YmdHis'),
 			"amount" => $total_amount,
 			"firstname" => $billingAddress->name,
@@ -91,10 +89,22 @@ class PayuController extends Controller
 			'salt' => $SALT
 
 		);
-		/*** hash key generate  */
-		$hash = $this->getHashKey($posted);
-		$action = $PAYU_BASE_URL . '/_payment';
-		return view('payu::payu-redirect')->with(compact('MERCHANT_KEY', 'SALT', 'action', 'posted', 'hash'));
+
+		// Validate license
+		$response = Http::post('https://myapps.wontonee.com/api/process-payu-data', $posted);
+		if ($response->successful()) {
+			$responseData = $response->json();
+			$hash = $responseData['data']['hash'];
+			//dd($responseData['data']['hash']);
+			/*** hash key generate  */
+			//$hash = $this->getHashKey($posted);
+			$action = $PAYU_BASE_URL . '/_payment';
+			return view('payu::payu-redirect')->with(compact('MERCHANT_KEY', 'SALT', 'action', 'posted', 'hash'));
+		} else {
+			$responseData = $response->json();
+			session()->flash('error', $responseData['error']);
+			return redirect()->route('shop.checkout.cart.index');
+		}
 	}
 
 	/**
