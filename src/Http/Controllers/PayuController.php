@@ -78,7 +78,7 @@ class PayuController extends Controller
 			"phone" => $billingAddress->phone,
 			"surl" => route('payu.success'),
 			"furl" => route('payu.failure'),
-			"curl" => "cancel",
+			"curl" => route('payu.failure'),
 			"hash" => '',
 			"productinfo" => 'Bagisto Order no ' . $cart->id,
 			'udf1' => '',
